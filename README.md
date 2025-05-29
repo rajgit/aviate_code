@@ -40,7 +40,7 @@ $ curl -X DELETE http://localhost:8000/candidates/7/  -H "Content-Type: applicat
 
 search candidate
 
-case 1 - 3 word name search
+case 1 - 3 word name search "ajay kumar yadav"
 $ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay Kumar Yadav"}' | more
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
@@ -48,7 +48,7 @@ $ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: appli
 {"candidates":["Ajay Kumar Yadav","Kumar Ajay Yadav","Ajay Kumar","Ajay Yadav","Kumar Yadav","Ramesh Yadav","Ajay Singh
 ","Kumar Singh"]}
 
-case 2 - two word name search
+case 2 - two word name search - "ajay kumar"
 $ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay kumar"}' | more
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
@@ -57,7 +57,7 @@ $ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: appli
 ]}
 
 
-case 3- one word name search
+case 3- one word name search - "ajay"
 
 $ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay"}' | more
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
