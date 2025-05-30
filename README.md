@@ -9,6 +9,13 @@ Logic for search is captured in the code.
 
 Have used and added sqlite file , it should have test data used below.
 
+---
+Installation
+install django rest framework and that is it.
+Ran below examples using django runserver
+
+----
+
 ###Sample working api calls
 
 
