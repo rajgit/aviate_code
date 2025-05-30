@@ -51,6 +51,11 @@ class CandidateSearchView(APIView):
             #Assuming different ordering for three word match, two word match and one word match
             #Will do alphabetical ordering in case of three word match and two work match and
             #in case of one word match - weightage/order is last_name, first_name and then middle name
+            #exact match shall be the first result
+            #---
+            #Not handling use cases where in there could be multiple users with same name, will have to find a way to order them, may be using one other value
+            #There are lot more use cases depending on the design/plan, and will need more examples and expected behavior to handle them
+            #For test purpose only returning name of the candidate and not the entire candidate info
             search_text_split = search_text.strip().split(" ")
             if len(search_text_split) > 3:
                 return Response({'response': 'Name cannot be more than three words'}, status=status.HTTP_400_BAD_REQUEST)
@@ -69,13 +74,16 @@ class CandidateSearchView(APIView):
             if f_name and m_name and l_name:
                 q_three_words_match = Candidate.objects.filter(
                     Q(name__icontains=f_name) & Q(name__icontains=m_name) & Q(name__icontains=l_name)).order_by('name').values_list('name', flat=True)
+                #With time may be can optimise the db query below, may be get cound of matches somehow,  but the high level idea  is the same.
                 q_two_words_match = Candidate.objects.filter(
                     (Q(name__icontains=f_name) & Q(name__icontains=m_name) & ~Q(name__icontains=l_name)) |
                     (Q(name__icontains=f_name) & Q(name__icontains=l_name) & ~Q(name__icontains=m_name)) |
                     (Q(name__icontains=m_name) & Q(name__icontains=l_name) & ~Q(name__icontains=f_name))
                     ).order_by('name').values_list('name', flat=True)
                 #order/priority for one word match - last_name, first_name and  then middle name
-                q_one_word_match_l = Candidate.objects.filter((Q(name__icontains=l_name) & ~Q(name__icontains=f_name) & ~Q(name__icontains=m_name))).order_by('name').values_list(
+                #Separate calls for reach match so that first name matches can be handled first, with ordering and then last name ..and then middle name
+                q_one_word_match_l = Candidate.objects.filter(
+                    (Q(name__icontains=l_name) & ~Q(name__icontains=f_name) & ~Q(name__icontains=m_name))).order_by('name').values_list(
                     'name', flat=True)
                 q_one_word_match_f = Candidate.objects.filter((Q(name__icontains=f_name) & ~Q(name__icontains=m_name) & ~Q(name__icontains=l_name))).order_by('name').values_list(
                     'name', flat=True)
@@ -94,6 +102,16 @@ class CandidateSearchView(APIView):
             elif f_name and not l_name and not m_name:
                 q_one_word_match = Candidate.objects.filter((Q(name__icontains=f_name))).order_by('name')
                 search_results = q_one_word_match.values_list('name', flat=True)
+            #exact match
+            try:
+                exact_match = Candidate.objects.get(name__iexact=search_text.strip())
+            except Candidate.DoesNotExist:
+                exact_match = None
+            logger.info(f"exact_match : {exact_match}")
+            if exact_match:
+                exact_match = exact_match.name
+                search_results.remove(exact_match)
+                search_results.insert(0, exact_match)
             return Response({'candidates':search_results}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f'error while extracting segment text {traceback.format_exc()}')

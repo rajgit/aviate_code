@@ -29,28 +29,27 @@ $ curl -X DELETE http://localhost:8000/candidates/7/  -H "Content-Type: applicat
 search candidate
 
 case 1 - 3 word name search
-$ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay Kumar Yadav"}' | more
+$  curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay Kumar Yadav"}' | more
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   163  100   136  100    27  19520   3875 --:--:-- --:--:-- --:--:-- 27166
+100   163  100   136  100    27  11654   2313 --:--:-- --:--:-- --:--:-- 14818
 {"candidates":["Ajay Kumar Yadav","Kumar Ajay Yadav","Ajay Kumar","Ajay Yadav","Kumar Yadav","Ramesh Yadav","Ajay Singh
 ","Kumar Singh"]}
 
 case 2 - two word name search
-$ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay kumar"}' | more
+
+$  curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay kumar"}' | more
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   142  100   121  100    21  21992   3816 --:--:-- --:--:-- --:--:-- 28400
+100   142  100   121  100    21  25308   4392 --:--:-- --:--:-- --:--:-- 35500
 {"candidates":["Ajay Kumar","Ajay Kumar Yadav","Kumar Ajay Yadav","Kumar Singh","Kumar Yadav","Ajay Singh","Ajay Yadav"
 ]}
 
-
 case 3- one word name search
-
-$ curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay"}' | more
+$  curl -X POST http://localhost:8000/candidates/search/  -H "Content-Type: application/json"  -X POST --data '{"name":"Ajay"}' | more
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   108  100    93  100    15  25999   4193 --:--:-- --:--:-- --:--:-- 36000
+100   108  100    93  100    15  14794   2386 --:--:-- --:--:-- --:--:-- 18000
 {"candidates":["Ajay Kumar","Ajay Kumar Yadav","Ajay Singh","Ajay Yadav","Kumar Ajay Yadav"]}
 
 ---
